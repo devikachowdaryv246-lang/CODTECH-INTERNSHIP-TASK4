@@ -1,0 +1,47 @@
+import pandas as pd
+from textblob import TextBlob
+import re
+
+# 1. DATA PREPROCESSING
+def clean_text(text):
+    '''Utility function to clean text by removing links and special characters.'''
+    text = re.sub(r"http\S+|www\S+|@\S+", "", text)  # Remove URLs and mentions
+    text = re.sub(r"[^\w\s]", "", text)              # Remove punctuation
+    return text.lower().strip()
+
+# 2. MODEL IMPLEMENTATION (Sentiment Logic)
+def get_sentiment(text):
+    '''Analyzes sentiment and returns Category (Positive, Negative, Neutral).'''
+    analysis = TextBlob(text)
+    # Polarity ranges from -1 (Negative) to 1 (Positive)
+    if analysis.sentiment.polarity > 0:
+        return 'Positive'
+    elif analysis.sentiment.polarity == 0:
+        return 'Neutral'
+    else:
+        return 'Negative'
+
+# 3. SAMPLE DATA & EXECUTION
+data = {
+    'Reviews': [
+        "I absolutely love this product! It's amazing.",
+        "The service was terrible and I'm very disappointed.",
+        "It was an okay experience, nothing special.",
+        "The best internship ever, learned so much!",
+        "Poor quality, would not recommend to anyone."
+    ]
+}
+
+df = pd.DataFrame(data)
+
+# Apply Preprocessing
+df['Cleaned_Reviews'] = df['Reviews'].apply(clean_text)
+
+# Apply Sentiment Analysis
+df['Sentiment'] = df['Cleaned_Reviews'].apply(get_sentiment)
+
+# 4. INSIGHTS
+print("--- Sentiment Analysis Results ---")
+print(df[['Reviews', 'Sentiment']])
+print("\n--- Summary ---")
+print(df['Sentiment'].value_counts())
