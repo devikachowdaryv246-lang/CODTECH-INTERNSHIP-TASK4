@@ -1,0 +1,30 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Assuming you've already run the sentiment analysis on your DataFrame 'df'
+# Count the occurrences of each sentiment
+sentiment_counts = df['Sentiment'].value_counts()
+
+# Ensure all categories are present for consistent plotting
+sentiment_counts = sentiment_counts.reindex(['Positive', 'Neutral', 'Negative']).fillna(0)
+
+# Set the visualization style
+sns.set(style="whitegrid")
+
+# 1. Bar Chart: Visualizing Sentiment Distribution
+plt.figure(figsize=(10, 6))
+sns.barplot(x=sentiment_counts.index, y=sentiment_counts.values, palette='viridis')
+plt.title('Distribution of Sentiments in Textual Data', fontsize=16)
+plt.xlabel('Sentiment Category', fontsize=12)
+plt.ylabel('Number of Reviews', fontsize=12)
+plt.show() # In your local notebook, use this to see the plot
+
+# 2. Pie Chart: Percentage Breakdown of Sentiments
+plt.figure(figsize=(8, 8))
+plt.pie(sentiment_counts, 
+        labels=sentiment_counts.index, 
+        autopct='%1.1f%%', 
+        colors=['#4CAF50', '#FFC107', '#F44336'], 
+        startangle=140)
+plt.title('Sentiment Distribution Percentage', fontsize=16)
+plt.show() # In your local notebook, use this to see the plot
